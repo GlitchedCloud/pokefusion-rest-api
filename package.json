@@ -10,23 +10,20 @@
     "fusion",
     "api"
   ],
-  "repository": "https://github.com/DoubleHub/pokefusion-api",
+  "repository": "https://github.com/giovanni-orciuolo/pokefusion-api",
   "scripts": {
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js"
   },
   "dependencies": {
-    "puppeteer": "^1.17.0"
+    "puppeteer": "^24.22.2"
   },
   "devDependencies": {
-    "eslint": "^5.16.0",
-    "eslint-config-standard": "^12.0.0",
-    "eslint-plugin-import": "^2.17.3",
-    "eslint-plugin-node": "^9.1.0",
-    "eslint-plugin-promise": "^4.1.1",
-    "eslint-plugin-standard": "^4.0.0",
-    "nodemon": "^1.19.1"
-  },
-  "engines": {
-    "node": ">=7.8.0"
+    "eslint": "^8.0.1",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-n": "^16.6.2",
+    "eslint-plugin-promise": "^6.0.0",
+    "nodemon": "^3.1.10"
   }
 }
