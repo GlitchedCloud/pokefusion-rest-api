@@ -1,24 +1,22 @@
 {
   "name": "pokefusion-rest-api",
   "version": "1.0.0",
-  "description": "A RESTful API for \"generating\" Pokémon fusions using Puppeteer and Express.",
+  "description": "A RESTful API for generating Pokémon fusions using local data and Express.",
   "main": "src/index.js",
   "author": "Armon Castor",
-  "license": "ISC",
   "keywords": [
     "pokemon",
     "fusion",
     "api"
   ],
-  "repository": "https://github.com/GlitchedCloud/pokefusion-rest-api/tree/fusiongenerato-rest-api",
+  "repository": "https://github.com/GlitchedCloud/pokefusion-rest-api",
   "scripts": {
     "dev": "nodemon src/index.js",
     "start": "node src/index.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^5.1.0",
-    "puppeteer": "^24.22.2"
+    "express": "^5.1.0"
   },
   "devDependencies": {
     "eslint": "^8.0.1",
