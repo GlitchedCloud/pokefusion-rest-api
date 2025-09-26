@@ -6,6 +6,9 @@ const path = require('path');
 const { POKEMON_SPLIT_NAMES, POKEMON_NAMES } = require('./data/pokemon-names');
 const { POKEMON_TYPES } = require('./data/pokemon-types');
 
+// Import utilities
+const logger = require('./utils/logger');
+
 // Constants
 const PORT = process.env.PORT || 3000;
 
@@ -64,9 +67,7 @@ async function getFusion(options = {}) {
     const headIndex = getPokemonIndex(headPokemon);
     const bodyIndex = getPokemonIndex(bodyPokemon);
 
-    console.log(
-      `[PokéFusion API] Generating fusion: ${headPokemon} (#${headIndex}) + ${bodyPokemon} (#${bodyIndex})`
-    );
+    logger.fusion(headPokemon, headIndex, bodyPokemon, bodyIndex);
 
     // Generate fusion name using split names approach
     const headParts = POKEMON_SPLIT_NAMES[headIndex];
@@ -98,13 +99,13 @@ async function getFusion(options = {}) {
       types: types,
     };
 
-    console.log('[PokéFusion API] Fusion generation complete (local data)');
+    logger.fusionComplete();
     return {
       ...fusionData,
       timestamp: new Date().toISOString(),
     };
   } catch (error) {
-    console.error('[PokéFusion API] Error generating fusion:', error.message);
+    logger.error('FUSION', 'Error generating fusion:', error.message);
     throw new Error(`Failed to generate fusion: ${error.message}`);
   }
 }
@@ -121,7 +122,7 @@ async function getPokemonNames(options = {}) {
       rightPokemonName: fusion.rightPokemonName,
     };
   } catch (error) {
-    console.error('[PokéFusion API] Error getting names:', error.message);
+    logger.error('FUSION', 'Error getting names:', error.message);
     throw error;
   }
 }
@@ -140,7 +141,7 @@ async function getPokemonTypes(options = {}) {
       },
     };
   } catch (error) {
-    console.error('[PokéFusion API] Error getting types:', error.message);
+    logger.error('FUSION', 'Error getting types:', error.message);
     throw error;
   }
 }
@@ -168,9 +169,7 @@ app.use(rateLimit);
 
 // Request logging middleware
 app.use((req, res, next) => {
-  console.log(
-    `[${new Date().toISOString()}] ${req.method} ${req.path} - ${req.ip}`
-  );
+  logger.request(req.method, req.path, req.ip);
   next();
 });
 
@@ -214,7 +213,7 @@ function getPokemonIndex(name) {
 // GET /api/fusion - Get a fusion with all data (supports query parameters)
 app.get('/api/fusion', async (req, res) => {
   try {
-    console.log('[REST API] Request for complete fusion data');
+    logger.apiRequest('complete fusion data');
     const startTime = Date.now();
 
     // Extract query parameters for specific Pokemon
@@ -250,7 +249,7 @@ app.get('/api/fusion', async (req, res) => {
     });
 
     const duration = Date.now() - startTime;
-    console.log(`[REST API] Fusion generation completed in ${duration}ms`);
+    logger.apiResponse('fusion generation', duration);
 
     if (!fusion) {
       return res.status(500).json({
@@ -265,7 +264,7 @@ app.get('/api/fusion', async (req, res) => {
       processingTime: `${duration}ms`,
     });
   } catch (error) {
-    console.error('[REST API] Error in /api/fusion:', error.message);
+    logger.error('API', 'Error in /api/fusion:', error.message);
     res.status(500).json({
       success: false,
       error: 'Failed to generate fusion',
@@ -278,7 +277,7 @@ app.get('/api/fusion', async (req, res) => {
 // GET /api/fusion/names - Get only Pokémon names (supports query parameters)
 app.get('/api/fusion/names', async (req, res) => {
   try {
-    console.log('[REST API] Request for Pokémon names');
+    logger.apiRequest('Pokémon names');
     const startTime = Date.now();
 
     // Extract and validate query parameters
@@ -326,7 +325,7 @@ app.get('/api/fusion/names', async (req, res) => {
       processingTime: `${duration}ms`,
     });
   } catch (error) {
-    console.error('[REST API] Error getting names:', error.message);
+    logger.error('API', 'Error getting names:', error.message);
     res.status(500).json({
       success: false,
       error: 'Failed to get names',
@@ -366,11 +365,9 @@ app.get('/api/fusion/types', async (req, res) => {
       bodyPokemon = normalizedBody;
     }
 
-    console.log(
-      '[REST API] Request for type information',
-      headPokemon ? ` - Head: ${headPokemon}` : '',
-      bodyPokemon ? ` - Body: ${bodyPokemon}` : ''
-    );
+    const headStr = headPokemon ? ` - Head: ${headPokemon}` : '';
+    const bodyStr = bodyPokemon ? ` - Body: ${bodyPokemon}` : '';
+    logger.apiRequest(`type information${headStr}${bodyStr}`);
     const startTime = Date.now();
 
     const types = await getPokemonTypes({
@@ -393,7 +390,7 @@ app.get('/api/fusion/types', async (req, res) => {
       processingTime: `${duration}ms`,
     });
   } catch (error) {
-    console.error('[REST API] Error getting types:', error.message);
+    logger.error('API', 'Error getting types:', error.message);
     res.status(500).json({
       success: false,
       error: 'Failed to get types',
@@ -405,7 +402,7 @@ app.get('/api/fusion/types', async (req, res) => {
 // GET /api/pokemon - Get list of available Pokemon
 app.get('/api/pokemon', (req, res) => {
   try {
-    console.log('[REST API] Request for Pokemon list');
+    logger.apiRequest('Pokemon list');
     const startTime = Date.now();
 
     // Return the complete Pokemon list with types
@@ -429,7 +426,7 @@ app.get('/api/pokemon', (req, res) => {
       processingTime: `${duration}ms`,
     });
   } catch (error) {
-    console.error('[REST API] Error getting Pokemon list:', error.message);
+    logger.error('API', 'Error getting Pokemon list:', error.message);
     res.status(500).json({
       success: false,
       error: 'Failed to get Pokemon list',
@@ -441,7 +438,7 @@ app.get('/api/pokemon', (req, res) => {
 // GET /api/pokemon/types - Get all Pokemon type data
 app.get('/api/pokemon/types', (req, res) => {
   try {
-    console.log('[REST API] Request for Pokemon type data');
+    logger.apiRequest('Pokemon type data');
     const startTime = Date.now();
 
     // Return all type mappings
@@ -454,7 +451,7 @@ app.get('/api/pokemon/types', (req, res) => {
       processingTime: `${Date.now() - startTime}ms`,
     });
   } catch (error) {
-    console.error('[REST API] Error getting Pokemon types:', error.message);
+    logger.error('API', 'Error getting Pokemon types:', error.message);
     res.status(500).json({
       success: false,
       error: 'Failed to get Pokemon types',
@@ -482,13 +479,6 @@ app.get('/', (req, res) => {
     version: process.env.npm_package_version || process.env.VERSION || '1.0.0',
     description:
       'Clean, efficient API for generating Pokémon fusions using minimal external resources',
-    features: {
-      'Local Data':
-        'Uses optimized split-name approach with embedded Pokemon data',
-      'Fast Generation': 'Minimal web scraping, most data generated locally',
-      'Type Information': 'Complete type data included for all 501 Pokemon',
-      'CDN Images': 'Direct links to fusion images via CDN',
-    },
     endpoints: {
       'GET /api/fusion': 'Get complete fusion data (all information)',
       'GET /api/fusion/names': 'Get only Pokémon names',
@@ -511,11 +501,6 @@ app.get('/', (req, res) => {
       'Body only': 'GET /api/fusion?body=charizard',
       'Available Pokemon': 'GET /api/pokemon',
     },
-    performance: {
-      'Pokemon Count': POKEMON_NAMES.length,
-      'Data Source': 'Local split-name array with type mappings',
-      'External Dependencies': 'Minimal - only for base64 image conversion',
-    },
   });
 });
 
@@ -530,7 +515,7 @@ app.use((req, res) => {
 
 // Global error handling middleware
 app.use((err, req, res, next) => {
-  console.error('[REST API] Unhandled error:', err);
+  logger.error('API', 'Unhandled error:', err.message);
   res.status(500).json({
     success: false,
     error: 'Internal server error',
@@ -540,21 +525,21 @@ app.use((err, req, res, next) => {
 
 // Graceful shutdown handling
 process.on('SIGTERM', () => {
-  console.log('[REST API] Received SIGTERM, shutting down gracefully');
+  logger.serverShutdown('SIGTERM');
   process.exit(0);
 });
 
 process.on('SIGINT', () => {
-  console.log('[REST API] Received SIGINT, shutting down gracefully');
+  logger.serverShutdown('SIGINT');
   process.exit(0);
 });
 
 // Start server
 const server = app.listen(PORT, () => {
-  console.log(`[PokéFusion REST API] 🚀 Server running on port ${PORT}`);
-  console.log(`[PokéFusion REST API] 📚 API docs: http://localhost:${PORT}`);
-  console.log(
-    `[PokéFusion REST API] 🔧 Environment: ${process.env.NODE_ENV || 'development'}`
+  logger.serverStart(PORT);
+  logger.info(
+    'SERVER',
+    `Environment: ${process.env.NODE_ENV || 'development'}`
   );
 });
 
