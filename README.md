@@ -1,6 +1,6 @@
 # PokéFusion REST API
 
-A clean, secure, and efficient Node.js REST API that generates random Pokémon fusions by scraping japeal.com. This API provides a simple interface to get fusion data including sprites, names, types, cries, and share URLs.
+A clean, secure, and efficient Node.js REST API that generates random Pokémon fusions by scraping fusiongenerato.com. This API provides fusion data including names, types, fusion images, and Pokemon details.
 
 ## ✨ Features
 
@@ -12,6 +12,8 @@ A clean, secure, and efficient Node.js REST API that generates random Pokémon f
 - **Health monitoring** endpoint
 - **Docker support** with proper Puppeteer configuration
 - **Environment-based configuration**
+- **Updated data source** - now uses fusiongenerato.com for enhanced reliability
+- **Complete Pokemon dataset** - 501 Pokemon from the original datalist
 
 ## 🚀 Quick Start
 
@@ -26,7 +28,7 @@ A clean, secure, and efficient Node.js REST API that generates random Pokémon f
 
 ```bash
 git clone https://github.com/GlitchedCloud/pokefusion-rest-api.git
-git checkout japeal-rest-api
+git checkout fusiongenerato-rest-api
 cd pokefusion-rest-api
 npm install
 ```
@@ -54,16 +56,19 @@ npm start
 
 Get complete fusion data including all information.
 
-### Specialized Endpoints
+### Available Endpoints
 
-- `GET /api/fusion/sprites` - Get only sprite URLs
 - `GET /api/fusion/names` - Get only Pokémon names
 - `GET /api/fusion/types` - Get only type information
-- `GET /api/fusion/cries` - Get only cry audio URLs
-- `GET /api/fusion/share` - Get only share URL
 - `GET /api/fusion/image` - Get only fusion image base64
 - `GET /api/health` - Health check and system status
 - `GET /` - API documentation
+
+### Removed Endpoints (Not Available)
+
+- ~~`GET /api/fusion/sprites`~~ - Individual Pokemon sprites not available on fusiongenerato.com
+- ~~`GET /api/fusion/cries`~~ - Audio cries not available on fusiongenerato.com
+- ~~`GET /api/fusion/share`~~ - Share URLs not meaningful from fusiongenerato.com
 
 ## ⚙️ Configuration
 
@@ -142,4 +147,4 @@ ISC License - see LICENSE file for details.
 
 ## ⚠️ Disclaimer
 
-This API scrapes data from japeal.com for educational purposes. Please respect their terms of service and don't abuse their servers. Consider implementing caching for production use.
+This API scrapes data from fusiongenerato.com for educational purposes. Please respect their terms of service and don't abuse their servers. Consider implementing caching for production use.

@@ -1,19 +1,16 @@
 {
   "name": "pokefusion-rest-api",
-  "version": "2.0.0",
+  "version": "1.0.0",
   "description": "A RESTful API for \"generating\" Pokémon fusions using Puppeteer and Express.",
   "main": "src/index.js",
-  "author": "Giovanni Orciuolo <giovanni.orciuolo1999@gmail.com>",
-  "contributors": [
-    "Armon Castor"
-  ],
+  "author": "Armon Castor",
   "license": "ISC",
   "keywords": [
     "pokemon",
     "fusion",
     "api"
   ],
-  "repository": "https://github.com/GlitchedCloud/pokefusion-rest-api/tree/japeal-rest-api",
+  "repository": "https://github.com/GlitchedCloud/pokefusion-rest-api/tree/fusiongenerato-rest-api",
   "scripts": {
     "dev": "nodemon src/index.js",
     "start": "node src/index.js"
