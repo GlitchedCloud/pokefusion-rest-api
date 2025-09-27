@@ -14,8 +14,8 @@ const config = {
 
   // Rate limiting configuration
   rateLimit: {
-    windowMs: process.env.RATE_LIMIT_WINDOW_MS || 60000, // 1 minute window
-    maxRequests: process.env.RATE_LIMIT_MAX_REQUESTS || 10 // Maximum 10 requests per minute
+    windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 60000, // 1 minute window
+    maxRequests: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 10 // Maximum 10 requests per minute
   },
 
   // CORS configuration
