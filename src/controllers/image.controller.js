@@ -9,7 +9,7 @@ class ImageController {
   /**
    * GET /api/images/fusion/:headId/:bodyId - Serve fusion image
    */
-  static getFusionImage(req, res) {
+  static getFusionImage (req, res) {
     try {
       const { headId, bodyId } = req.params;
 
@@ -25,7 +25,7 @@ class ImageController {
           success: false,
           error: 'Invalid parameters',
           message: validation.error.message,
-          provided: validation.error.provided,
+          provided: validation.error.provided
         });
       }
 
@@ -45,7 +45,7 @@ class ImageController {
       res.set({
         'Cache-Control': 'public, max-age=86400', // Cache for 24 hours
         'X-Image-Source': imageResult.attribution,
-        'Content-Type': 'image/png',
+        'Content-Type': 'image/png'
       });
 
       // Serve the local file
@@ -60,7 +60,7 @@ class ImageController {
       res.status(500).json({
         success: false,
         error: 'Server error',
-        message: 'Failed to process image request',
+        message: 'Failed to process image request'
       });
     }
   }
@@ -68,7 +68,7 @@ class ImageController {
   /**
    * GET /api/images/types/:typeName - Serve actual type icon files
    */
-  static getTypeIcon(req, res) {
+  static getTypeIcon (req, res) {
     try {
       const { typeName } = req.params;
 
@@ -81,7 +81,7 @@ class ImageController {
           success: false,
           error: 'Type not found',
           message: validation.error.message,
-          provided: validation.error.provided,
+          provided: validation.error.provided
         });
       }
 
@@ -90,7 +90,7 @@ class ImageController {
       // Set appropriate headers for image serving
       res.set({
         'Content-Type': 'image/png',
-        'Cache-Control': 'public, max-age=86400', // Cache for 24 hours
+        'Cache-Control': 'public, max-age=86400' // Cache for 24 hours
       });
 
       // Serve the file using the path from service
@@ -104,7 +104,7 @@ class ImageController {
       res.status(500).json({
         success: false,
         error: 'Server error',
-        message: 'Failed to process type icon request',
+        message: 'Failed to process type icon request'
       });
     }
   }

@@ -9,7 +9,7 @@ class PokemonController {
   /**
    * GET /api/pokemon - Get all Pokemon names
    */
-  static async getAllPokemon(req, res) {
+  static async getAllPokemon (req, res) {
     try {
       logger.apiRequest('Pokemon list');
       const startTime = Date.now();
@@ -21,9 +21,9 @@ class PokemonController {
         success: true,
         data: {
           pokemon: pokemonList,
-          count: pokemonList.length,
+          count: pokemonList.length
         },
-        processingTime: `${duration}ms`,
+        processingTime: `${duration}ms`
       });
     } catch (error) {
       logger.error('API', 'Error getting Pokemon list:', error.message);
@@ -31,8 +31,8 @@ class PokemonController {
         success: false,
         error: 'Failed to get Pokemon list',
         ...(config.server.environment !== 'production' && {
-          details: error.message,
-        }),
+          details: error.message
+        })
       });
     }
   }

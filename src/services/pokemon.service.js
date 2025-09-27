@@ -24,7 +24,7 @@ class PokemonService {
    * Initialize Pokemon data cache on application startup
    * Should be called once during app initialization
    */
-  static async initialize() {
+  static async initialize () {
     if (this.isInitialized) {
       logger.info('POKEMON_SERVICE', 'Already initialized');
       return;
@@ -83,7 +83,7 @@ class PokemonService {
   /**
    * Refresh Pokemon data cache (call this when data changes)
    */
-  static async refreshCache() {
+  static async refreshCache () {
     logger.info('POKEMON_SERVICE', 'Refreshing data cache...');
     this.pokemonData.clear();
     this.pokemonById.clear();
@@ -97,7 +97,7 @@ class PokemonService {
   /**
    * Check if a Pokemon name is valid
    */
-  static isValidPokemon(name) {
+  static isValidPokemon (name) {
     if (!name || typeof name !== 'string') return false;
     if (!this.isInitialized) return false;
     return this.pokemonData.has(name.toLowerCase());
@@ -106,7 +106,7 @@ class PokemonService {
   /**
    * Get a random Pokemon name
    */
-  static getRandomPokemonName() {
+  static getRandomPokemonName () {
     if (!this.isInitialized || this.pokemonNames.length === 0) return null;
     return this.pokemonNames[
       Math.floor(Math.random() * this.pokemonNames.length)
@@ -116,7 +116,7 @@ class PokemonService {
   /**
    * Normalize Pokemon name (find correct casing)
    */
-  static normalizePokemonName(name) {
+  static normalizePokemonName (name) {
     if (!name || typeof name !== 'string') return null;
     if (!this.isInitialized) return null;
 
@@ -127,7 +127,7 @@ class PokemonService {
   /**
    * Get Pokemon index from name
    */
-  static getPokemonIndex(name) {
+  static getPokemonIndex (name) {
     if (!name || typeof name !== 'string') return 0;
     if (!this.isInitialized) return 0;
 
@@ -138,7 +138,7 @@ class PokemonService {
   /**
    * Get all Pokemon names
    */
-  static getAllPokemonNames() {
+  static getAllPokemonNames () {
     if (!this.isInitialized) return [];
     return [...this.pokemonNames]; // Return copy to prevent modification
   }
@@ -146,7 +146,7 @@ class PokemonService {
   /**
    * Get Pokemon types by ID
    */
-  static getPokemonTypes(pokemonId) {
+  static getPokemonTypes (pokemonId) {
     if (!this.isInitialized) return [];
     return this.pokemonTypes.get(pokemonId) || [];
   }
@@ -154,7 +154,7 @@ class PokemonService {
   /**
    * Get all Pokemon types mapping
    */
-  static getAllPokemonTypes() {
+  static getAllPokemonTypes () {
     if (!this.isInitialized) return new Map();
     return new Map(this.pokemonTypes); // Return copy to prevent modification
   }
@@ -162,7 +162,7 @@ class PokemonService {
   /**
    * Get Pokemon data by name
    */
-  static getPokemonByName(name) {
+  static getPokemonByName (name) {
     if (!name || typeof name !== 'string' || !this.isInitialized) return null;
     return this.pokemonData.get(name.toLowerCase()) || null;
   }
@@ -170,7 +170,7 @@ class PokemonService {
   /**
    * Get Pokemon data by ID
    */
-  static getPokemonById(id) {
+  static getPokemonById (id) {
     if (!id || !this.isInitialized) return null;
     const pokemonId = typeof id === 'string' ? parseInt(id, 10) : id;
     return this.pokemonById.get(pokemonId) || null;
@@ -179,7 +179,7 @@ class PokemonService {
   /**
    * Get Pokemon split names for fusion logic
    */
-  static getPokemonSplitNames(pokemonId) {
+  static getPokemonSplitNames (pokemonId) {
     if (!pokemonId || !this.isInitialized) return [];
     return this.splitNames.get(pokemonId) || [];
   }

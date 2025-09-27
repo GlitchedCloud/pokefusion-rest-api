@@ -1,7 +1,6 @@
 const express = require('express');
 const cors = require('cors');
 const bytes = require('bytes');
-const path = require('path');
 
 // Import configuration
 const config = require('./config');

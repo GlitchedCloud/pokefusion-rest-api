@@ -9,7 +9,7 @@ class FusionService {
   /**
    * Generate a complete fusion with all data
    */
-  static async generateFusion(options = {}) {
+  static async generateFusion (options = {}) {
     try {
       // Get Pokemon names (specific or random)
       let headPokemon, bodyPokemon;
@@ -41,11 +41,11 @@ class FusionService {
       // Generate fusion name using GameData split names
       const headParts = PokemonService.getPokemonSplitNames(headIndex) || [
         headPokemon,
-        '',
+        ''
       ];
       const bodyParts = PokemonService.getPokemonSplitNames(bodyIndex) || [
         '',
-        bodyPokemon,
+        bodyPokemon
       ];
 
       // Take head from first part of head Pokemon, body from second part of body Pokemon
@@ -62,24 +62,24 @@ class FusionService {
       // Convert types to the expected format with internal proxy URLs
       const types = allTypes.map(type => ({
         name: type,
-        imageUrl: `${config.server.url}/api/images/types/${type.toLowerCase()}`,
+        imageUrl: `${config.server.url}/api/images/types/${type.toLowerCase()}`
       }));
 
       // Create base fusion data
       const fusionData = {
         leftPkmnIndex: headIndex,
         rightPkmnIndex: bodyIndex,
-        fusionName: fusionName,
-        fusionImageUrl: fusionImageUrl,
+        fusionName,
+        fusionImageUrl,
         leftPokemonName: headPokemon,
         rightPokemonName: bodyPokemon,
-        types: types,
+        types
       };
 
       logger.fusionComplete();
       return {
         ...fusionData,
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       };
     } catch (error) {
       logger.error('FUSION', 'Error generating fusion:', error.message);
@@ -90,16 +90,16 @@ class FusionService {
   /**
    * Get only Pokemon names from a fusion
    */
-  static async getFusionNames(options = {}) {
+  static async getFusionNames (options = {}) {
     try {
       const fusion = await this.generateFusion({
         headPokemon: options.headPokemon,
-        bodyPokemon: options.bodyPokemon,
+        bodyPokemon: options.bodyPokemon
       });
       return {
         fusionName: fusion.fusionName,
         leftPokemonName: fusion.leftPokemonName,
-        rightPokemonName: fusion.rightPokemonName,
+        rightPokemonName: fusion.rightPokemonName
       };
     } catch (error) {
       logger.error('FUSION', 'Error getting names:', error.message);
@@ -110,18 +110,18 @@ class FusionService {
   /**
    * Get only type information from a fusion
    */
-  static async getFusionTypes(options = {}) {
+  static async getFusionTypes (options = {}) {
     try {
       const fusion = await this.generateFusion({
         headPokemon: options.headPokemon,
-        bodyPokemon: options.bodyPokemon,
+        bodyPokemon: options.bodyPokemon
       });
       return {
         types: fusion.types,
         fusion: {
           firstType: fusion.types[0]?.imageUrl || '',
-          secondType: fusion.types[1]?.imageUrl || '',
-        },
+          secondType: fusion.types[1]?.imageUrl || ''
+        }
       };
     } catch (error) {
       logger.error('FUSION', 'Error getting types:', error.message);

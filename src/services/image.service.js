@@ -1,4 +1,3 @@
-const config = require('../config');
 const logger = require('../utils/logger');
 const path = require('path');
 const fs = require('fs').promises;
@@ -17,10 +16,12 @@ class ImageService {
     __dirname,
     '../data/infinite-fusion-graphics/custom'
   );
+
   static AUTOGEN_DIR = path.join(
     __dirname,
     '../data/infinite-fusion-graphics/autogen'
   );
+
   static NULL_SPRITE = '/assets/sprites/null.png';
 
   /**

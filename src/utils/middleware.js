@@ -16,9 +16,9 @@ const rateLimiter = rateLimit({
       success: false,
       error: 'Too many requests',
       message: `Maximum ${config.rateLimit.maxRequests} requests per ${config.rateLimit.windowMs / 1000} seconds`,
-      retryAfter: Math.ceil(config.rateLimit.windowMs / 1000),
+      retryAfter: Math.ceil(config.rateLimit.windowMs / 1000)
     });
-  },
+  }
 });
 
 /**
@@ -46,7 +46,7 @@ const urlSizeLimit = maxSize => {
         success: false,
         error: 'URL too long',
         message: `URL length (${urlLength} bytes) exceeds maximum allowed size (${maxSize} bytes)`,
-        limit: `${maxSize} bytes`,
+        limit: `${maxSize} bytes`
       });
     }
 
@@ -62,7 +62,7 @@ const errorHandler = (err, req, res, next) => {
   res.status(500).json({
     success: false,
     error: 'Internal server error',
-    ...(config.server.environment !== 'production' && { details: err.message }),
+    ...(config.server.environment !== 'production' && { details: err.message })
   });
 };
 
@@ -70,5 +70,5 @@ module.exports = {
   rateLimit: rateLimiter,
   requestLogger,
   errorHandler,
-  urlSizeLimit,
+  urlSizeLimit
 };

@@ -905,7 +905,7 @@ const GameData = {
     ['Bascu', 'legion'],
     ['Sneas', 'sler'],
     ['Over', 'qwil'],
-    ['Enamo', 'morus'],
+    ['Enamo', 'morus']
   ],
 
   NAT_DEX_MAPPING: {
@@ -1159,8 +1159,8 @@ const GameData = {
     498: 774,
     499: 774,
     500: 719,
-    501: 370,
-  },
+    501: 370
+  }
 };
 
 module.exports = GameData;
