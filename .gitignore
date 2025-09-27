@@ -69,3 +69,4 @@ build/
 
 # Ignore all PNG files in the types directory
 src/assets/types/*.png
+src/assets/sprites/*.png
