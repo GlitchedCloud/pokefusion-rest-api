@@ -24,13 +24,6 @@ const config = {
     credentials: false,
   },
 
-  // External URLs
-  externalUrls: {
-    fusionImageCdn:
-      process.env.FUSION_IMAGE_CDN ||
-      'https://cdn.jsdelivr.net/gh/fusiondex-org/infinite-fusion-graphics',
-  },
-
   // API configuration
   api: {
     limit: process.env.REQUEST_SIZE_LIMIT || '512b', // Request body size limit

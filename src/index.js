@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const bytes = require('bytes');
+const path = require('path');
 
 // Import configuration
 const config = require('./config');
@@ -17,6 +18,9 @@ const {
 const fusionRoutes = require('./routes/fusion.routes');
 const pokemonRoutes = require('./routes/pokemon.routes');
 const imageRoutes = require('./routes/images.routes');
+
+// Import services
+const ImageService = require('./services/image.service');
 
 // Create Express app
 const app = express();
@@ -78,15 +82,32 @@ process.on('SIGINT', () => {
   process.exit(0);
 });
 
-// Start server
+// Initialize services and start server
 const PORT = config.server.port;
-const server = app.listen(PORT, () => {
-  logger.serverStart(PORT);
-  logger.info('SERVER', `Environment: ${config.server.environment}`);
-});
+
+async function startServer() {
+  try {
+    // Initialize image service indexes before starting server
+    await ImageService.initialize();
+
+    // Start HTTP server
+    const server = app.listen(PORT, () => {
+      logger.serverStart(PORT);
+      logger.info('SERVER', `Environment: ${config.server.environment}`);
+    });
+
+    return server;
+  } catch (error) {
+    logger.error('Failed to start server:', error);
+    process.exit(1);
+  }
+}
+
+// Start the server
+const server = startServer();
 
 // Export for testing and module use
 module.exports = {
   app,
-  server,
+  server: server.then ? server : Promise.resolve(server),
 };

@@ -45,7 +45,7 @@ class FusionService {
       const bodyParts = POKEMON_SPLIT_NAMES[bodyIndex];
       const fusionName = `${headParts[0]}${bodyParts[1]}`;
 
-      // Generate fusion image URL using internal proxy (hides external CDN)
+      // Generate fusion image URL
       const fusionImageUrl = `${config.server.url}/api/images/fusion/${headIndex}/${bodyIndex}`;
 
       // Get Pokemon types from local data (limit to 2 types max)

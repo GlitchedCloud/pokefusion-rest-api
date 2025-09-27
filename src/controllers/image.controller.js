@@ -1,14 +1,15 @@
 const ImageService = require('../services/image.service');
 const logger = require('../utils/logger');
+const path = require('path');
 
 /**
  * Controller for image-related API endpoints
  */
 class ImageController {
   /**
-   * GET /api/images/fusion/:headId/:bodyId - Redirect to fusion image
+   * GET /api/images/fusion/:headId/:bodyId - Serve fusion image
    */
-  static redirectToFusionImage(req, res) {
+  static getFusionImage(req, res) {
     try {
       const { headId, bodyId } = req.params;
 
@@ -28,30 +29,32 @@ class ImageController {
         });
       }
 
-      // Generate external URL using service
-      const externalUrl = ImageService.generateFusionImageUrl(
+      // Generate local image path using service
+      const imageResult = ImageService.generateFusionImagePath(
         validation.headId,
         validation.bodyId
       );
 
-      // Log the redirect for monitoring
+      // Log the image request for monitoring
       logger.info(
         'IMAGES',
-        `Redirecting to fusion image: ${validation.headId}.${validation.bodyId}`
+        `Serving fusion image: ${validation.headId}.${validation.bodyId} (${imageResult.attribution})`
       );
 
-      // Set caching headers for the redirect itself
+      // Set caching headers for the image
       res.set({
-        'Cache-Control': 'public, max-age=3600', // Cache redirect for 1 hour
-        'X-Redirect-To': 'External CDN',
+        'Cache-Control': 'public, max-age=86400', // Cache for 24 hours
+        'X-Image-Source': imageResult.attribution,
+        'Content-Type': 'image/png',
       });
 
-      // Temporary redirect to actual CDN (client fetches directly)
-      res.redirect(302, externalUrl);
+      // Serve the local file
+      const imagePath = path.join(__dirname, '..', imageResult.imageUrl);
+      res.sendFile(imagePath);
     } catch (error) {
       logger.error(
         'IMAGES',
-        'Error processing fusion image redirect:',
+        'Error processing fusion image request:',
         error.message
       );
       res.status(500).json({
