@@ -97,6 +97,7 @@ async function startServer() {
     const server = app.listen(PORT, () => {
       logger.serverStart(PORT);
       logger.info('SERVER', `Environment: ${config.server.environment}`);
+      logger.info('CORS', `Allowed origins: ${JSON.stringify(config.cors.origin)}`);
     });
 
     return server;

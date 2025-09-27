@@ -21,8 +21,8 @@ const config = {
   // CORS configuration
   cors: {
     origin: process.env.ALLOWED_ORIGINS
-      ? process.env.ALLOWED_ORIGINS.split(',')
-      : '*',
+      ? process.env.ALLOWED_ORIGINS.split(',').map(origin => origin.trim())
+      : false, 
     credentials: false
   },
 
