@@ -1,3 +1,6 @@
 [submodule "src/data/pokedex"]
 	path = src/data/pokedex
 	url = https://github.com/infinitefusion/pokedex-entries/
+[submodule "src/data/infinite-fusion-graphics"]
+	path = src/data/infinite-fusion-graphics
+	url = https://github.com/GlitchedCloud/infinite-fusion-graphics
