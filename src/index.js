@@ -10,7 +10,7 @@ const logger = require('./utils/logger');
 const {
   rateLimit: rateLimiter,
   errorHandler,
-  urlSizeLimit,
+  urlSizeLimit
 } = require('./utils/middleware');
 
 // Import routes
@@ -54,7 +54,7 @@ app.get('/', (req, res) => {
     uptime: process.uptime(),
     memory: process.memoryUsage(),
     version: config.server.version,
-    repository: 'https://github.com/GlitchedCloud/pokefusion-rest-api',
+    repository: 'https://github.com/GlitchedCloud/pokefusion-rest-api'
   });
 });
 
@@ -64,7 +64,7 @@ app.use((req, res, next) => {
     success: false,
     error: 'Endpoint not found',
     message:
-      'The requested endpoint does not exist. Visit / for API documentation.',
+      'The requested endpoint does not exist. Visit / for API documentation.'
   });
 });
 
@@ -85,7 +85,7 @@ process.on('SIGINT', () => {
 // Initialize services and start server
 const PORT = config.server.port;
 
-async function startServer() {
+async function startServer () {
   try {
     // Initialize services before starting server
     await ImageService.initialize();
@@ -110,5 +110,5 @@ const server = startServer();
 // Export for testing and module use
 module.exports = {
   app,
-  server: server.then ? server : Promise.resolve(server),
+  server: server.then ? server : Promise.resolve(server)
 };

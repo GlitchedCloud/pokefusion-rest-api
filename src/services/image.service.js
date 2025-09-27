@@ -28,7 +28,7 @@ class ImageService {
    * Initialize file indexes on application startup
    * Should be called once during app initialization
    */
-  static async initialize() {
+  static async initialize () {
     if (this.isInitialized) {
       logger.info('IMAGE_SERVICE', 'Already initialized');
       return;
@@ -65,7 +65,7 @@ class ImageService {
    * Index all custom sprite files
    * @private
    */
-  static async _indexCustomSprites() {
+  static async _indexCustomSprites () {
     try {
       const files = await fs.readdir(this.CUSTOM_DIR);
 
@@ -89,7 +89,7 @@ class ImageService {
    * Index all autogen sprite files
    * @private
    */
-  static async _indexAutogenSprites() {
+  static async _indexAutogenSprites () {
     try {
       const headDirs = await fs.readdir(this.AUTOGEN_DIR);
 
@@ -131,7 +131,7 @@ class ImageService {
    * Refresh file indexes (call this periodically or when files change)
    * NOT CURRENTLY IMPLEMENTED -
    */
-  static async refreshIndexes() {
+  static async refreshIndexes () {
     logger.info('IMAGE_SERVICE', 'Refreshing file indexes...');
     this.customSprites.clear();
     this.autogenSprites.clear();
@@ -145,7 +145,7 @@ class ImageService {
    * @param {string|number} bodyId - Body Pokemon ID
    * @returns {Object} Validation result with parsed numbers or error
    */
-  static validateFusionParams(headId, bodyId) {
+  static validateFusionParams (headId, bodyId) {
     const headNum = parseInt(headId, 10);
     const bodyNum = parseInt(bodyId, 10);
 
@@ -154,15 +154,15 @@ class ImageService {
         valid: false,
         error: {
           message: 'headId and bodyId must be positive numbers',
-          provided: { headId, bodyId },
-        },
+          provided: { headId, bodyId }
+        }
       };
     }
 
     return {
       valid: true,
       headId: headNum,
-      bodyId: bodyNum,
+      bodyId: bodyNum
     };
   }
 
@@ -172,12 +172,12 @@ class ImageService {
    * @param {number} bodyId - Body Pokemon ID
    * @returns {Object} Result with imageUrl and attribution
    */
-  static generateFusionImagePath(headId, bodyId) {
+  static generateFusionImagePath (headId, bodyId) {
     if (!this.isInitialized) {
       logger.warn('Image service not initialized, falling back to null sprite');
       return {
         imageUrl: this.NULL_SPRITE,
-        attribution: 'Missing sprite.',
+        attribution: 'Missing sprite.'
       };
     }
 
@@ -187,7 +187,7 @@ class ImageService {
     if (this.customSprites.has(spriteKey)) {
       return {
         imageUrl: `/data/infinite-fusion-graphics/custom/${headId}.${bodyId}.png`,
-        attribution: 'custom', // TODO: Attribution unknown for custom sprites - database not implemented
+        attribution: 'custom' // TODO: Attribution unknown for custom sprites - database not implemented
       };
     }
 
@@ -196,14 +196,14 @@ class ImageService {
     if (headSprites && headSprites.has(bodyId)) {
       return {
         imageUrl: `/data/infinite-fusion-graphics/autogen/${headId}/${headId}.${bodyId}.png`,
-        attribution: 'japeal',
+        attribution: 'japeal'
       };
     }
 
     // Fallback to null sprite (lowest priority)
     return {
       imageUrl: this.NULL_SPRITE,
-      attribution: 'Missing sprite.',
+      attribution: 'Missing sprite.'
     };
   }
 
@@ -212,14 +212,14 @@ class ImageService {
    * @param {string} typeName - Pokemon type name
    * @returns {Object} Validation result with file path
    */
-  static validateTypeName(typeName) {
+  static validateTypeName (typeName) {
     if (!/^[a-zA-Z]{3,15}$/.test(typeName)) {
       return {
         valid: false,
         error: {
           message: 'Type name must be 3-15 letters only',
-          provided: { typeName },
-        },
+          provided: { typeName }
+        }
       };
     }
 
@@ -235,15 +235,15 @@ class ImageService {
         valid: false,
         error: {
           message: `Type '${normalizedType}' does not exist`,
-          provided: { typeName: normalizedType },
-        },
+          provided: { typeName: normalizedType }
+        }
       };
     }
 
     return {
       valid: true,
       typeName: normalizedType,
-      filePath: typeIconPath,
+      filePath: typeIconPath
     };
   }
 }

@@ -52,11 +52,15 @@ class PokemonService {
         // Store types
         this.pokemonTypes.set(pokemonId, data.types);
 
-        // Store split names from GameData
-        if (pokemonId < GameData.SPLIT_NAMES.length) {
-          this.splitNames.set(pokemonId, GameData.SPLIT_NAMES[pokemonId]);
+        // Store split names from GameData using NAT_DEX_MAPPING
+        const mappedIndex = GameData.NAT_DEX_MAPPING[pokemonId] || pokemonId;
+        if (
+          mappedIndex < GameData.SPLIT_NAMES.length &&
+          GameData.SPLIT_NAMES[mappedIndex]
+        ) {
+          this.splitNames.set(pokemonId, GameData.SPLIT_NAMES[mappedIndex]);
         } else {
-          // Fallback for Pokemon beyond the split names array
+          // Fallback for Pokemon without split names
           this.splitNames.set(pokemonId, [data.fullName, '']);
         }
       }
