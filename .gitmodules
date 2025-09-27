@@ -1,0 +1,3 @@
+[submodule "src/data/pokedex"]
+	path = src/data/pokedex
+	url = https://github.com/infinitefusion/pokedex-entries/
