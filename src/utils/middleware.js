@@ -37,9 +37,6 @@ const urlSizeLimit = maxSize => {
     const fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
     const urlLength = fullUrl.length;
 
-    console.log(fullUrl);
-    console.log(`URL length: ${urlLength} bytes (limit: ${maxSize})`);
-
     if (urlLength > maxSize) {
       logger.warn(
         'API',

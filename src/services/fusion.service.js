@@ -45,18 +45,18 @@ class FusionService {
       const bodyParts = POKEMON_SPLIT_NAMES[bodyIndex];
       const fusionName = `${headParts[0]}${bodyParts[1]}`;
 
-      // Generate fusion image URL using CDN pattern
-      const fusionImageUrl = `${config.externalUrls.fusionImageCdn}/${headIndex}/${headIndex}.${bodyIndex}.png`;
+      // Generate fusion image URL using internal proxy (hides external CDN)
+      const fusionImageUrl = `${config.server.url}/api/images/fusion/${headIndex}/${bodyIndex}`;
 
       // Get Pokemon types from local data (limit to 2 types max)
       const headTypes = POKEMON_TYPES[headIndex.toString()] || [];
       const bodyTypes = POKEMON_TYPES[bodyIndex.toString()] || [];
       const allTypes = [...headTypes, ...bodyTypes].slice(0, 2);
 
-      // Convert types to the expected format with local server URLs
+      // Convert types to the expected format with internal proxy URLs
       const types = allTypes.map(type => ({
         name: type,
-        imageUrl: `${config.server.url}/types/${type.toLowerCase()}.png`,
+        imageUrl: `${config.server.url}/api/images/types/${type.toLowerCase()}`,
       }));
 
       // Create base fusion data

@@ -16,6 +16,7 @@ const {
 // Import routes
 const fusionRoutes = require('./routes/fusion.routes');
 const pokemonRoutes = require('./routes/pokemon.routes');
+const imageRoutes = require('./routes/images.routes');
 
 // Create Express app
 const app = express();
@@ -38,6 +39,7 @@ app.use((req, res, next) => {
 // API Routes
 app.use('/api/fusion', fusionRoutes);
 app.use('/api/pokemon', pokemonRoutes);
+app.use('/api/images', imageRoutes);
 
 // Root endpoint
 app.get('/', (req, res) => {
