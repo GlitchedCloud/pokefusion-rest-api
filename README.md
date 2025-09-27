@@ -13,7 +13,7 @@ A high-performance Node.js REST API for Pokémon Infinite Fusion that serves aut
 1. Clone and install dependencies:
 
 ```bash
-git clone https://github.com/GlitchedCloud/pokefusion-rest-api.git
+git clone --recurse-submodules -j8 https://github.com/GlitchedCloud/pokefusion-rest-api.git
 cd pokefusion-rest-api
 npm install
 ```
