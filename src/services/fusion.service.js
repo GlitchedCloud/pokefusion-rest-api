@@ -1,5 +1,3 @@
-const { POKEMON_SPLIT_NAMES } = require('../data/pokemon-names');
-const { POKEMON_TYPES } = require('../data/pokemon-types');
 const PokemonService = require('./pokemon.service');
 const logger = require('../utils/logger');
 const config = require('../config');
@@ -40,17 +38,25 @@ class FusionService {
 
       logger.fusion(headPokemon, headIndex, bodyPokemon, bodyIndex);
 
-      // Generate fusion name using split names approach
-      const headParts = POKEMON_SPLIT_NAMES[headIndex];
-      const bodyParts = POKEMON_SPLIT_NAMES[bodyIndex];
-      const fusionName = `${headParts[0]}${bodyParts[1]}`;
+      // Generate fusion name using GameData split names
+      const headParts = PokemonService.getPokemonSplitNames(headIndex) || [
+        headPokemon,
+        '',
+      ];
+      const bodyParts = PokemonService.getPokemonSplitNames(bodyIndex) || [
+        '',
+        bodyPokemon,
+      ];
+
+      // Take head from first part of head Pokemon, body from second part of body Pokemon
+      const fusionName = `${headParts[0]}${bodyParts[1] || bodyParts[0]}`;
 
       // Generate fusion image URL
       const fusionImageUrl = `${config.server.url}/api/images/fusion/${headIndex}/${bodyIndex}`;
 
-      // Get Pokemon types from local data (limit to 2 types max)
-      const headTypes = POKEMON_TYPES[headIndex.toString()] || [];
-      const bodyTypes = POKEMON_TYPES[bodyIndex.toString()] || [];
+      // Get Pokemon types from service (limit to 2 types max)
+      const headTypes = PokemonService.getPokemonTypes(headIndex) || [];
+      const bodyTypes = PokemonService.getPokemonTypes(bodyIndex) || [];
       const allTypes = [...headTypes, ...bodyTypes].slice(0, 2);
 
       // Convert types to the expected format with internal proxy URLs

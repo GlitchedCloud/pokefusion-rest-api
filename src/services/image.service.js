@@ -29,11 +29,11 @@ class ImageService {
    */
   static async initialize() {
     if (this.isInitialized) {
-      logger.info('Image service already initialized');
+      logger.info('IMAGE_SERVICE', 'Already initialized');
       return;
     }
 
-    logger.info('Initializing image service file indexes...');
+    logger.info('IMAGE_SERVICE', 'Initializing file indexes...');
     const startTime = Date.now();
 
     try {
@@ -45,9 +45,15 @@ class ImageService {
 
       this.isInitialized = true;
       const duration = Date.now() - startTime;
-      logger.info(`Image service initialized successfully in ${duration}ms`);
-      logger.info(`Indexed ${this.customSprites.size} custom sprites`);
-      logger.info(`Indexed ${this.autogenSprites.size} autogen directories`);
+      logger.info('IMAGE_SERVICE', `Initialized successfully in ${duration}ms`);
+      logger.info(
+        'IMAGE_SERVICE',
+        `Indexed ${this.customSprites.size} custom sprites`
+      );
+      logger.info(
+        'IMAGE_SERVICE',
+        `Indexed ${this.autogenSprites.size} autogen directories`
+      );
     } catch (error) {
       logger.error('Failed to initialize image service:', error);
       throw error;
@@ -125,7 +131,7 @@ class ImageService {
    * NOT CURRENTLY IMPLEMENTED -
    */
   static async refreshIndexes() {
-    logger.info('Refreshing image service file indexes...');
+    logger.info('IMAGE_SERVICE', 'Refreshing file indexes...');
     this.customSprites.clear();
     this.autogenSprites.clear();
     this.isInitialized = false;

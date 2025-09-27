@@ -36,34 +36,6 @@ class PokemonController {
       });
     }
   }
-
-  /**
-   * GET /api/pokemon/types - Get all Pokemon type data
-   */
-  static async getPokemonTypes(req, res) {
-    try {
-      logger.apiRequest('Pokemon type data');
-      const startTime = Date.now();
-
-      const typesData = PokemonService.getPokemonTypes();
-      const duration = Date.now() - startTime;
-
-      res.json({
-        success: true,
-        data: typesData,
-        processingTime: `${duration}ms`,
-      });
-    } catch (error) {
-      logger.error('API', 'Error getting Pokemon types:', error.message);
-      res.status(500).json({
-        success: false,
-        error: 'Failed to get Pokemon types',
-        ...(config.server.environment !== 'production' && {
-          details: error.message,
-        }),
-      });
-    }
-  }
 }
 
 module.exports = PokemonController;

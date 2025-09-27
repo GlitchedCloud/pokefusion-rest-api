@@ -21,6 +21,7 @@ const imageRoutes = require('./routes/images.routes');
 
 // Import services
 const ImageService = require('./services/image.service');
+const PokemonService = require('./services/pokemon.service');
 
 // Create Express app
 const app = express();
@@ -87,8 +88,9 @@ const PORT = config.server.port;
 
 async function startServer() {
   try {
-    // Initialize image service indexes before starting server
+    // Initialize services before starting server
     await ImageService.initialize();
+    await PokemonService.initialize();
 
     // Start HTTP server
     const server = app.listen(PORT, () => {

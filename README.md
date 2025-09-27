@@ -1,6 +1,6 @@
 # PokéFusion REST API
 
-A clean, secure, and efficient Node.js REST API that generates Pokémon fusions using local data. This API provides fusion data including names, types, fusion images, and Pokemon details with sub-millisecond response times.
+A high-performance Node.js REST API for Pokémon Infinite Fusion that serves authentic fusion data, sprites, and statistics. Built with enterprise-grade in-memory caching for optimal performance with 150,000+ sprites and 565 Pokémon entries.
 
 ## 🚀 Quick Start
 
@@ -25,7 +25,10 @@ cp .env.example .env
 # Edit .env file with your settings
 ```
 
-3. Place Pokemon type images in `src/assets/types/` following the naming convention in `src/assets/types/README.md`.
+3. Ensure sprite directories exist:
+
+   - `src/assets/types/` - Pokemon type icons
+   - `src/assets/sprites/null.png` - Fallback sprite
 
 4. Start the server:
 
@@ -39,39 +42,77 @@ npm start
 
 ## 📡 API Endpoints
 
-### GET `/api/fusion`
+All endpoints use **query parameters** for clean, RESTful design.
 
-Get complete fusion data (all information)
+### 🔀 Fusion Generation
 
-### GET `/api/fusion/names`
+#### `GET /api/fusion`
 
-Get only Pokémon names
+Complete fusion data with authentic Pokemon Infinite Fusion mechanics.
 
-### GET `/api/fusion/types`
+**Query Parameters:**
 
-Get only type information
+- `head` (optional): Head Pokemon name (e.g., `?head=Bulbasaur`)
+- `body` (optional): Body Pokemon name (e.g., `?body=Charmander`)
+- Returns random fusion if no parameters provided
 
-### GET `/api/fusion/image`
+**Examples:**
 
-Get only fusion image base64
+```http
+GET /api/fusion                              # Random fusion
+GET /api/fusion?head=Bulbasaur               # Bulbasaur + random body
+GET /api/fusion?body=Charmander              # Random head + Charmander
+GET /api/fusion?head=Bulbasaur&body=Charmander # Bulbamander fusion
+```
 
-### GET `/api/pokemon`
+**Response includes:**
 
-Get list of all available Pokémon with types
+- **Fusion Name**: Authentic split-name generation (Bulba + mander = Bulbamander)
+- **Fusion ID**: Head.Body format (#1.4)
+- **Image URL**: Local sprite with smart fallback (custom → autogen → null)
+- **Attribution**: Sprite source tracking (custom/japeal/missing)
+- **Stats**: Complete battle stats using official formulas
+- **Types**: Accurate type combinations
+- **Pokedex**: FusionDex entries with height, weight, category
 
-### GET `/api/pokemon/types`
+#### `GET /api/fusion/names`
 
-Get complete Pokemon type mapping data
+Fusion name & Fusion ID only (supports all query parameters)
 
-### GET `/api/images/fusion/{head}/{body}`
+#### `GET /api/fusion/types`
 
-Get fusion image by head and body Pokemon ids
+Type information only (supports all query parameters)
 
-### GET `/api/images/types/{type}`
+#### `GET /api/fusion/stats`
 
-Get Pokemon type icon by type name
+Battle statistics only (supports all query parameters)
 
-### GET `/`
+#### `GET /api/fusion/pokedex`
+
+Pokedex entries only (supports all query parameters)
+
+### 📊 Pokemon Data
+
+#### `GET /api/pokemon`
+
+Complete list of 565 available Pokemon names
+
+### 🖼️ Image Serving
+
+#### `GET /api/images/fusion/{headId}/{bodyId}`
+
+High-performance local sprite serving with smart fallbacks.
+
+**Headers:**
+
+- `X-Image-Source`: Attribution (custom/japeal/missing)
+- `Cache-Control`: 24-hour caching for optimal performance
+
+#### `GET /api/images/types/{typeName}`
+
+Pokemon type icons (fire, water, grass, etc.)
+
+#### `GET /`
 
 API Status and metadata
 
@@ -113,7 +154,15 @@ npm audit
 ## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch
-3. Make your changes with tests
-4. Run `npm run lint` and `npm test`
-5. Submit a pull request
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes with appropriate logging
+4. Test the performance impact with large datasets
+5. Update README if adding new endpoints or features
+6. Submit a pull request
+
+### Code Standards
+
+- Use proper logging with context parameters
+- Implement in-memory caching for performance-critical operations
+- Follow RESTful API conventions with query parameters
+- Include appropriate error handling and fallbacks
