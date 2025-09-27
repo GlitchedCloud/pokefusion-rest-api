@@ -1,9 +1,11 @@
+const config = require('../config');
+
 /**
  * Logger utility class for centralized logging across the application
  */
 class Logger {
   constructor() {
-    this.isDevelopment = process.env.NODE_ENV !== 'production';
+    this.isDevelopment = config.server.environment !== 'production';
   }
 
   /**

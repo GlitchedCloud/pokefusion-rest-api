@@ -2,18 +2,6 @@
 
 A clean, secure, and efficient Node.js REST API that generates Pokémon fusions using local data. This API provides fusion data including names, types, fusion images, and Pokemon details with sub-millisecond response times.
 
-## ✨ Features
-
-- **Clean REST API** with consistent JSON responses
-- **Rate limiting** to prevent abuse (10 requests/minute per IP)
-- **Security hardened** with updated dependencies and proper error handling
-- **High performance** - local data generation with sub-millisecond response times
-- **Multiple endpoints** for different data needs
-- **Health monitoring** endpoint
-- **Environment-based configuration**
-- **Complete Pokemon dataset** - 501 Pokemon with optimized local data
-- **Minimal dependencies** - no web scraping or external browser requirements
-
 ## 🚀 Quick Start
 
 ### Prerequisites
@@ -75,13 +63,9 @@ Get list of all available Pokémon with types
 
 Get complete Pokemon type mapping data
 
-### GET `/api/health`
-
-Health check endpoint
-
 ### GET `/`
 
-API documentation
+API Status and metadata
 
 ## ⚙️ Configuration
 
@@ -92,20 +76,6 @@ Create a `.env` file based on `.env.example`:
 ```bash
 cp .env.example .env
 ```
-
-```bash
-# Server Configuration
-PORT=3000
-NODE_ENV=production
-SERVER_URL=https://yourapidomain.com
-
-# Security Configuration
-ALLOWED_ORIGINS=https://yourdomain.com,https://anotherdomain.com
-```
-
-### Security
-
-This API implements modern security best practices including rate limiting, input validation, and proper error handling.
 
 ## 🐳 Docker Support
 
@@ -131,10 +101,6 @@ npm run lint
 # Check for vulnerabilities
 npm audit
 ```
-
-## 📈 Monitoring
-
-Use the `/api/health` endpoint for monitoring.
 
 ## 🤝 Contributing
 
