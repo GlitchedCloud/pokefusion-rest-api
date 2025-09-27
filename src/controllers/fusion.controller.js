@@ -8,26 +8,24 @@ const config = require('../config');
  */
 class FusionController {
   /**
-   * GET /api/fusion - Get a fusion with all data
+   * Normalized method to handle query parameter validation and service calls
    */
-  static async getFusion(req, res) {
+  static async handleFusionRequest (req, res, serviceMethod, logContext) {
     try {
-      logger.apiRequest('complete fusion data');
+      logger.apiRequest(logContext);
       const startTime = Date.now();
 
-      // Extract query parameters for specific Pokemon
+      // Extract and validate query parameters
       const { head, body } = req.query;
-
-      // Validate Pokemon names if provided
-      let headPokemon = null,
-        bodyPokemon = null;
+      let headPokemon = null;
+      let bodyPokemon = null;
 
       if (head) {
         headPokemon = PokemonService.normalizePokemonName(head);
         if (!headPokemon) {
           return res.status(400).json({
             success: false,
-            error: `Invalid head Pokemon: ${head}. Use GET /api/pokemon to see available Pokemon.`,
+            error: `Invalid head Pokemon: ${head}. Use GET /api/pokemon to see available Pokemon.`
           });
         }
       }
@@ -37,173 +35,92 @@ class FusionController {
         if (!bodyPokemon) {
           return res.status(400).json({
             success: false,
-            error: `Invalid body Pokemon: ${body}. Use GET /api/pokemon to see available Pokemon.`,
+            error: `Invalid body Pokemon: ${body}. Use GET /api/pokemon to see available Pokemon.`
           });
         }
       }
 
-      const fusion = await FusionService.generateFusion({
-        headPokemon,
-        bodyPokemon,
-      });
-
+      // Call the appropriate service method
+      const result = await serviceMethod({ headPokemon, bodyPokemon });
       const duration = Date.now() - startTime;
-      logger.apiResponse('fusion generation', duration);
 
-      if (!fusion) {
-        return res.status(500).json({
-          success: false,
-          error: 'Failed to generate fusion',
-        });
-      }
+      logger.apiResponse(logContext, duration);
 
       res.json({
         success: true,
-        data: fusion,
-        processingTime: `${duration}ms`,
+        data: result,
+        processingTime: `${duration}ms`
       });
     } catch (error) {
-      logger.error('API', 'Error in /api/fusion:', error.message);
+      logger.error('API', `Error in ${logContext}:`, error.message);
       res.status(500).json({
         success: false,
-        error: 'Failed to generate fusion',
-        // Don't expose internal error details in production
+        error: `Failed to get ${logContext}`,
         ...(config.server.environment !== 'production' && {
-          details: error.message,
-        }),
+          details: error.message
+        })
       });
     }
+  }
+
+  /**
+   * GET /api/fusion - Get a fusion with all data
+   */
+  static async getFusion (req, res) {
+    return FusionController.handleFusionRequest(
+      req,
+      res,
+      FusionService.generateFusion,
+      'complete fusion data'
+    );
   }
 
   /**
    * GET /api/fusion/names - Get only Pokémon names
    */
-  static async getFusionNames(req, res) {
-    try {
-      logger.apiRequest('Pokémon names');
-      const startTime = Date.now();
-
-      // Extract and validate query parameters
-      const { head, body } = req.query;
-      let headPokemon = null,
-        bodyPokemon = null;
-
-      if (head) {
-        headPokemon = PokemonService.normalizePokemonName(head);
-        if (!headPokemon) {
-          return res.status(400).json({
-            success: false,
-            error: `Invalid head Pokemon: ${head}`,
-          });
-        }
-      }
-
-      if (body) {
-        bodyPokemon = PokemonService.normalizePokemonName(body);
-        if (!bodyPokemon) {
-          return res.status(400).json({
-            success: false,
-            error: `Invalid body Pokemon: ${body}`,
-          });
-        }
-      }
-
-      const names = await FusionService.getFusionNames({
-        headPokemon,
-        bodyPokemon,
-      });
-
-      const duration = Date.now() - startTime;
-
-      if (!names) {
-        return res.status(500).json({
-          success: false,
-          error: 'Failed to get names',
-        });
-      }
-
-      res.json({
-        success: true,
-        data: names,
-        processingTime: `${duration}ms`,
-      });
-    } catch (error) {
-      logger.error('API', 'Error getting names:', error.message);
-      res.status(500).json({
-        success: false,
-        error: 'Failed to get names',
-        ...(config.server.environment !== 'production' && {
-          details: error.message,
-        }),
-      });
-    }
+  static async getFusionNames (req, res) {
+    return FusionController.handleFusionRequest(
+      req,
+      res,
+      FusionService.getFusionNames,
+      'fusion names'
+    );
   }
 
   /**
    * GET /api/fusion/types - Get only type information
    */
-  static async getFusionTypes(req, res) {
-    try {
-      const { head, body } = req.query;
-      let headPokemon = null,
-        bodyPokemon = null;
+  static async getFusionTypes (req, res) {
+    return FusionController.handleFusionRequest(
+      req,
+      res,
+      FusionService.getFusionTypes,
+      'fusion types'
+    );
+  }
 
-      if (head) {
-        const normalizedHead = PokemonService.normalizePokemonName(head);
-        if (!normalizedHead) {
-          return res.status(400).json({
-            success: false,
-            error: `Invalid head Pokemon: ${head}`,
-          });
-        }
-        headPokemon = normalizedHead;
-      }
+  /**
+   * GET /api/fusion/stats - Get only fusion stats
+   */
+  static async getFusionStats (req, res) {
+    return FusionController.handleFusionRequest(
+      req,
+      res,
+      FusionService.getFusionStats,
+      'fusion stats'
+    );
+  }
 
-      if (body) {
-        const normalizedBody = PokemonService.normalizePokemonName(body);
-        if (!normalizedBody) {
-          return res.status(400).json({
-            success: false,
-            error: `Invalid body Pokemon: ${body}`,
-          });
-        }
-        bodyPokemon = normalizedBody;
-      }
-
-      const headStr = headPokemon ? ` - Head: ${headPokemon}` : '';
-      const bodyStr = bodyPokemon ? ` - Body: ${bodyPokemon}` : '';
-      logger.apiRequest(`type information${headStr}${bodyStr}`);
-      const startTime = Date.now();
-
-      const types = await FusionService.getFusionTypes({
-        headPokemon,
-        bodyPokemon,
-      });
-
-      const duration = Date.now() - startTime;
-
-      if (!types) {
-        return res.status(500).json({
-          success: false,
-          error: 'Failed to get types',
-        });
-      }
-
-      res.json({
-        success: true,
-        data: types,
-        processingTime: `${duration}ms`,
-      });
-    } catch (error) {
-      logger.error('API', 'Error getting types:', error.message);
-      res.status(500).json({
-        success: false,
-        error: 'Failed to get types',
-        ...(config.server.environment !== 'production' && {
-          details: error.message,
-        }),
-      });
-    }
+  /**
+   * GET /api/fusion/pokedex - Get only Pokedex entry (supports query parameters)
+   */
+  static async getFusionPokedex (req, res) {
+    return FusionController.handleFusionRequest(
+      req,
+      res,
+      FusionService.getFusionPokedex,
+      'fusion pokedex'
+    );
   }
 }
 

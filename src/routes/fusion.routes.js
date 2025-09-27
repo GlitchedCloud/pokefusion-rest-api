@@ -12,4 +12,10 @@ router.get('/names', FusionController.getFusionNames);
 // GET /api/fusion/types - Get only type information (supports query parameters)
 router.get('/types', FusionController.getFusionTypes);
 
+// GET /api/fusion/stats - Get only stats information (supports query parameters)
+router.get('/stats', FusionController.getFusionStats);
+
+// GET /api/fusion/pokedex - Get only Pokedex entry (supports query parameters)
+router.get('/pokedex', FusionController.getFusionPokedex);
+
 module.exports = router;
