@@ -27,6 +27,6 @@ Place Pokemon type images in this directory with the following naming convention
 
 ## Access
 
-These images are served at: `/types/{type}.png`
+These images are served at: `/api/images/types/{type}`
 
-Example: `http://pokefusionapi.com/types/electric.png`
+Example: `http://pokefusionapi.com/api/images/types/fire`

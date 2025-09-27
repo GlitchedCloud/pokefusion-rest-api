@@ -28,7 +28,7 @@ const config = {
   externalUrls: {
     fusionImageCdn:
       process.env.FUSION_IMAGE_CDN ||
-      'https://cdn.jsdelivr.net/gh/fusiondex-org/infinite-fusion-graphics/autogen',
+      'https://cdn.jsdelivr.net/gh/fusiondex-org/infinite-fusion-graphics',
   },
 
   // API configuration

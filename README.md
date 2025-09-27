@@ -63,6 +63,14 @@ Get list of all available Pokémon with types
 
 Get complete Pokemon type mapping data
 
+### GET `/api/images/fusion/{head}/{body}`
+
+Get fusion image by head and body Pokemon ids
+
+### GET `/api/images/types/{type}`
+
+Get Pokemon type icon by type name
+
 ### GET `/`
 
 API Status and metadata
